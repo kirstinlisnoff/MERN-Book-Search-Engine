@@ -1,7 +1,6 @@
 import express from 'express';
 import path from 'node:path';
-import db from './config/connection.js';
-// import routes from './routes/index.js';
+import mongoose from 'mongoose';  // Instead of importing your `db` connection
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -14,36 +13,41 @@ import resolvers from './schemas/resolvers.js';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+console.log('Starting server...');
 const startApolloServer = async () => {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-  });
-  await server.start();
-  app.use(
-    '/graphql',
-    express.json(),
-    expressMiddleware(server, {
-      context: async ({ req }) => authMiddleware(req),
-    }),
-  );
+  try {
+    console.log('Connecting to MongoDB...');
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/googlebooks');
+    console.log('MongoDB connected successfully');
 
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
+    const server = new ApolloServer({
+      typeDefs,
+      resolvers,
+    });
+    await server.start();
 
-// if we're in production, serve client/build as static assets
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
-  }); 
-}
+    app.use(
+      '/graphql',
+      express.json(),
+      expressMiddleware(server, {
+        context: async ({ req }) => authMiddleware(req),
+      }),
+    );
 
-// app.use(routes);
-
-db.once('open', () => {
-  app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
+    if (process.env.NODE_ENV === 'production') {
+      app.use(express.static(path.join(__dirname, '../client/build')));
+      app.get('*', (_req, res) => {
+        res.sendFile(path.join(__dirname, '../client/build/index.html'));
+      });
+    }
+app.get('/', (_req, res) => {
+  res.send('Express server is running');
 });
+
+    app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
+  } catch (err) {
+    console.error('Error starting server:', err);
+  }
 };
 
 startApolloServer();

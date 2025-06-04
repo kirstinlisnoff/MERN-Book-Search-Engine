@@ -1,6 +1,6 @@
 
 import jwt from 'jsonwebtoken';
-import { Request } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 // import { createSecretKey } from 'crypto';
 dotenv.config();
@@ -41,23 +41,23 @@ export const authMiddleware = (req: Request) => {
   }
 };
 
-// export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-//   const authHeader = req.headers.authorization;
+export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
 
-//   if (authHeader) {
-//     const token = authHeader.split(' ')[1];
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
 
-//     const secretKey = process.env.JWT_SECRET_KEY || '';
+    const secretKey = process.env.JWT_SECRET_KEY || '';
 
-//     jwt.verify(token, secretKey, (err, user) => {
-//       if (err) {
-//         return res.sendStatus(403); // Forbidden
-//       }
+    jwt.verify(token, secretKey, (err, user) => {
+      if (err) {
+        return res.sendStatus(403); // Forbidden
+      }
 
-//       req.user = user as JwtPayload;
-//       return next();
-//     });
-//   } else {
-//     res.sendStatus(401); // Unauthorized
-//   }
-// };
+      req.user = user as JwtPayload;
+      return next();
+    });
+  } else {
+    res.sendStatus(401); // Unauthorized
+  }
+};
