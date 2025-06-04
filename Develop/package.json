@@ -8,12 +8,20 @@
     "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
     "install": "cd server && npm i && cd ../client && npm i",
     "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
-    "render-build":"npm install && npm run build"
+    "render-build": "npm install && npm run build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/graphql": "^14.2.3",
     "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.12.2",
+    "apollo-server-errors": "^3.3.1",
+    "express": "^5.1.0",
+    "graphql": "^16.11.0",
+    "graphql-tag": "^2.12.6"
   }
 }
