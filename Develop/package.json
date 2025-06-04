@@ -14,8 +14,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/dotenv": "^6.1.1",
-    "@types/graphql": "^14.2.3"
+    "@types/graphql": "^14.2.3",
+    "@types/jsonwebtoken": "^9.0.9"
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",
