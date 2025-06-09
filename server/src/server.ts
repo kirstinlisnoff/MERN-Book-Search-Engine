@@ -41,11 +41,11 @@ console.log('__dirname is:', __dirname);
       }),
     );
 
-    if (process.env.NODE_ENV === 'production') {
-      app.use(express.static(path.join(process.cwd(), 'client', 'build')));
-      app.get('*', (_req, res) => {
-        res.sendFile(path.join(process.cwd(), 'client', 'build', 'index.html'));
-});
+  if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
+  });
     }
 app.get('/', (_req, res) => {
   res.send('Express server is running');
