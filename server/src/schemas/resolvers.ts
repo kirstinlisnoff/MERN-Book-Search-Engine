@@ -6,6 +6,7 @@ import { AuthenticationError } from 'apollo-server-errors';
 const resolvers = {
   Query: {
     me: async (_parent: any, _args: any, context: any) => {
+      console.log('Context user:', context.user);
       if (!context.user) {
         throw new AuthenticationError('You need to be logged in!');
       }

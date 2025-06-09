@@ -38,6 +38,8 @@ const SavedBooks = () => {
     return <h2>Error: {error.message}</h2>;
   }
 
+   console.log('Query data:', data);
+
   return (
     <>
       <div className='text-light bg-dark p-5'>
