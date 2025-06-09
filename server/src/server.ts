@@ -11,13 +11,15 @@ import typeDefs from './schemas/typeDefs.js';
 import resolvers from './schemas/resolvers.js';
 
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+// import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+const clientDistPath = path.resolve(__dirname, '..', '..', 'client', 'dist');
 
 console.log('Starting server...');
 const startApolloServer = async () => {
@@ -42,9 +44,10 @@ console.log('__dirname is:', __dirname);
     );
 
   if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
+app.use(express.static(clientDistPath));
+
 app.get('*', (_req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+  res.sendFile(path.join(clientDistPath, 'index.html'));
 });
 
     }
