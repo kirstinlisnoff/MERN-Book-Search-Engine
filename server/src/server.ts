@@ -25,6 +25,7 @@ const startApolloServer = async () => {
     console.log('Connecting to MongoDB...');
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/googlebooks');
     console.log('MongoDB connected successfully');
+console.log('__dirname is:', __dirname);
 
     const server = new ApolloServer({
       typeDefs,
@@ -41,10 +42,10 @@ const startApolloServer = async () => {
     );
 
     if (process.env.NODE_ENV === 'production') {
-      app.use(express.static(path.join(__dirname, '../client/build')));
+      app.use(express.static(path.join(process.cwd(), 'client', 'build')));
       app.get('*', (_req, res) => {
-        res.sendFile(path.join(__dirname, '../client/build/index.html'));
-      });
+        res.sendFile(path.join(process.cwd(), 'client', 'build', 'index.html'));
+});
     }
 app.get('/', (_req, res) => {
   res.send('Express server is running');
